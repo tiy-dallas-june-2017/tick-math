@@ -5,12 +5,13 @@ const session = require('express-session');
 
 const app = express();
 
+app.use(express.static('public'));
 app.use(bodyParser.urlencoded({extended: false}));
 
 app.use(session({
-  secret: 'hagen',
-  resave: false,
-  saveUninitialized: true
+  secret: 'hagen'
+  // resave: false,
+  // saveUninitialized: true
 }));
 
 const theMustEngine = mustache();
@@ -40,7 +41,8 @@ app.get('/', function(req, res) {
 app.post('/', function(req, res) {
 
   //Calculating correctness
-  if (Number(req.body.sum) === req.session.num1 + req.session.num2) {
+  const isCorrect = Number(req.body.sum) === req.session.num1 + req.session.num2;
+  if (isCorrect) {
     if (req.session.correctCount === undefined) {
       req.session.correctCount = 1;
     }
@@ -62,7 +64,8 @@ app.post('/', function(req, res) {
   questions.push({
     num1: req.session.num1,
     num2: req.session.num2,
-    sum: Number(req.body.sum)
+    sum: Number(req.body.sum),
+    isCorrect: isCorrect
   });
   req.session.questions = questions;
 
@@ -70,6 +73,10 @@ app.post('/', function(req, res) {
 
   //generating the page again for the next phase of the quiz
   generateAndRenderPage(req, res);
+});
+
+app.get('/history', function(req, res) {
+  res.render('history', { questions: req.session.questions });
 });
 
 app.listen(5076, function() {

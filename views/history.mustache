@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <link rel="Stylesheet" href="style.css" />
+  </head>
+  <body>
+
+    {{#questions}}
+      {{#isCorrect}}
+      <div class="so-right">{{num1}} + {{num2}} = {{sum}}</div>
+      {{/isCorrect}}
+      {{^isCorrect}}
+      <div class="so-wrong">{{num1}} + {{num2}} = {{sum}}</div>
+      {{/isCorrect}}
+
+    {{/questions}}
+
+    <p><a href="/">MOAR MATH</a></p>
+  </body>
+</html>
